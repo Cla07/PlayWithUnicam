@@ -1,0 +1,49 @@
+//da user page scss
+
+.header-row {
+    font-weight: bold;
+    border-bottom: 3px solid #000 !important;
+    height: 50px;
+    align-content: center;
+    text-align: center;
+}
+
+.data-row {
+    border-bottom: 1px solid #000 !important;
+    align-items: center;
+    text-align: center;
+}
+
+.checkbox-column{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+.ion-gridgridPersonalized{
+max-width: 100%;
+margin-top: 25px;
+}
+
+/*
+.child-class {
+    flex: 1 0 auto;
+  }
+*/
+/*
+ion-row.header-row ion-col {
+    text-align: center; /* Allinea il testo al centro nelle colonne dell'header */
+//  }
+
+/*
+ion-row.header-row ion-col.header-column {
+    text-align: center;
+    width: 10%;
+    /* Aggiungi qui le tue regole CSS specifiche per le colonne dell'intestazione */
+    /* Ad esempio, larghezza, sfondo, colore del testo, ecc. */
+ // }
+
+
+
+  
+  

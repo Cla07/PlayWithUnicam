@@ -31,6 +31,19 @@ ion-label{
   overflow: auto;
 }
 
+.labelNomeMateria{
+  font-size: 25px;
+  font-weight: bold;
+  color: var(--ion-color-unicamblue);
+}
+
+.labelNomeCategoria{
+  font-size: 25px;
+  font-weight: bold;
+  color: var(--ion-color-unicamblue);
+}
+
+
 .selectedItem{
   --background: var(--ion-color-unicamblue);
   --color:var(--ion-color-light);
@@ -43,6 +56,7 @@ ion-label{
     color:var(--ion-color-light) !important;
   }
 }
+
 
 @media screen and (max-height:675px) {
   .listContent{

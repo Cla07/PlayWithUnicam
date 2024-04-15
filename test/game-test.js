@@ -27,7 +27,7 @@ describe('Game.js', function () {
     describe('#creaGioco()', function () {
         it('should create a game and save it to the database', function () {
             return new Promise((resolve, reject) => {
-                game.creaGioco("Gioco Test", "TURNI", 1, 2, "//test", true, { game: "Gioco Test", test: "Test config" }, "Regolamento Test")
+                game.creaGioco("Gioco Test", "TURNI", 1, 2,"materiaTest","categoriaTest", "//test", true, { game: "Gioco Test", test: "Test config" }, "Regolamento Test")
                     .then(_ => {
                         db.pool.query('SELECT * FROM public.giochi WHERE nome=$1', ["Gioco Test"], (error, results) => {
                             if (error) return reject(error);
@@ -39,6 +39,8 @@ describe('Game.js', function () {
                                 tipo: "TURNI",
                                 min_giocatori: "1",
                                 max_giocatori: "2",
+                                materia: "materiaTest",
+                                categoria: "categoriaTest",
                                 link: "//test",
                                 attivo: true,
                                 config: { game: "Gioco Test", test: "Test config" },
@@ -148,10 +150,12 @@ describe('Game.js', function () {
                             tipo: "TURNI",
                             min_giocatori: "1",
                             max_giocatori: "2",
+                            materia: "mateTest", 
+                            categoria: "cateTest",
                             link: "//test"
                         }
                         assert.deepStrictEqual(results.rows[0], expected);
-                        return game.modificaGioco(idGiocoTest, "Gioco Modificato", "NORMALE", 2, 4, "//new", true, { config: "new" }, "Nuovo regolamento");
+                        return game.modificaGioco(idGiocoTest, "Gioco Modificato", "NORMALE", 2, 4,"mateModTest","cateMofTest", "//new", true, { config: "new" }, "Nuovo regolamento");
                     })
                     .then(_ => { return game.getInfoGioco(idGiocoTest); })
                     .then(results => {
@@ -161,6 +165,8 @@ describe('Game.js', function () {
                             tipo: "NORMALE",
                             min_giocatori: "2",
                             max_giocatori: "4",
+                            materia: "mateModTest", 
+                            categoria: "cateMofTest",
                             link: "//new"
                         }
                         assert.deepStrictEqual(results.rows[0], expected);

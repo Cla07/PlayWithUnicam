@@ -20,6 +20,18 @@
   </ion-toolbar>
 </ion-header>
 
+  <!---Ricerca gioco per materia-->
+  <div style="display: flex; align-items: center;">  <!---justify-content: center;-->
+    <ion-input [(ngModel)]="searchMatterGame" placeholder="Cerca gioco per materia" style="max-width: 200px; border: 1px solid #000; flex: 0 0 auto; margin-left: 30px;"></ion-input>
+    <ion-button (click)="onSearchMatterGame()" color="unicamred" expand="block" shape="round" style="margin-left: 10px;">Cerca</ion-button>
+</div>
+
+ <!---Ricerca gioco per categoria-->
+ <div style="display: flex; align-items: center;">
+  <ion-input [(ngModel)]="searchCategoryGame" placeholder="Cerca gioco per categoria" style="max-width: 200px; border: 1px solid #000; flex: 0 0 auto; margin-left: 30px;"></ion-input>
+  <ion-button (click)="onSearchCategoryGame()" color="unicamred" expand="block" shape="round" style="margin-left: 10px;">Cerca</ion-button>
+</div>
+
 <ion-content>
   <img src="../../../../assets/images/wave-header.png" alt="" class="wave-header">
 
@@ -44,11 +56,11 @@
 
     <div class="section-header">
       <h2 style="color: #fff;">Catalogo dei giochi</h2>
-      <p *ngIf="this.games.length == 0">Non è stato trovato alcun gioco! :(</p>
+      <p *ngIf="this.games.length == 0">Non è stato trovato alcun gioco! :(</p>   
     </div>
 
     <swiper [slidesPerView]="1.2" [spaceBetween]="20" [navigation]="true" [breakpoints]="breakpoints">
-      <ng-container *ngFor="let game of games">
+      <ng-container *ngFor="let game of games">   
         <ng-template swiperSlide>
           <ion-card class="ioncardgame" (click)="openIntroLobby(game)" tappable button="true">
             <img src="../../../../assets/images/white_wave_header.png" alt="" class="white-wave-header">
@@ -62,6 +74,8 @@
             </ion-item>
             <div class="game-title">
               <ion-card-title>{{game.nome}}</ion-card-title>
+        
+              <p>{{ materieNomi[game.id_materia] }} -  {{ categorieNomi[game.id_categoria] }} </p> 
             </div>
           </ion-card>
         </ng-template>

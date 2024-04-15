@@ -6,8 +6,8 @@ import { CreateGamePage } from './create-game.page';
 const routes: Routes = [
   {
     path: '',
-    component: CreateGamePage
-  }
+    component: CreateGamePage,
+  },
 ];
 
 @NgModule({

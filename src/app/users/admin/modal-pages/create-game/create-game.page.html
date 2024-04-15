@@ -26,6 +26,36 @@
           </ion-item>
         </div>
 
+        
+          <p class="info">
+            Seleziona la materia o crearne una nuova 
+          </p>
+          
+  
+          <ion-row style="height: 100%;">
+            <ion-col size="auto" style="text-align: left; display: flex; align-items: center;">
+              <ion-button fill="outline" (click)="apriModaleMateria()">MATERIA</ion-button>
+            </ion-col>
+            <ion-col size="6" style="width: auto; display: flex; align-items: center;">
+              <h2 *ngIf="nomeMateria" style="margin: 0; text-align: center;">{{ nomeMateria }}</h2>
+            </ion-col>
+          </ion-row>
+               
+
+        <p class="info">
+          Puoi selezionare la categoria o crearne una nuova 
+        </p>
+        
+        <ion-row style="height: 100%;">
+          <ion-col size="auto" style="text-align: left; display: flex; align-items: center;">
+            <ion-button fill="outline" (click)="apriModaleCategoria()">CATEGORIA</ion-button>
+          </ion-col>
+          <ion-col size="6" style="width: auto; display: flex; align-items: center;">
+            <h2 *ngIf="nomeCategoria" style="margin: 0; text-align: center;">{{ nomeCategoria }}</h2>
+          </ion-col>
+        </ion-row>
+             
+
         <ion-list class="gameList">
           <ion-list-header>
             <ion-label text-wrap>Seleziona un gioco tra quelli attualmente supportati:</ion-label>

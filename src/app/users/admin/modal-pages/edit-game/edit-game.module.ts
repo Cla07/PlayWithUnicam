@@ -9,6 +9,7 @@ import { EditorDirective } from '../../components/editor-container/editor.direct
 import { GameEditorService } from '../../services/game-editor/game-editor.service';
 import { NoEditorWarningComponent } from '../../components/no-editor-warning/no-editor-warning.component';
 import { GamesComponentsModule } from 'src/app/PlayWithUnicam-Games/games-components.module';
+import { MateriaModule } from 'src/app/components/materia/materia.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ import { GamesComponentsModule } from 'src/app/PlayWithUnicam-Games/games-compon
     ReactiveFormsModule,
     IonicModule,
     EditGamePageRoutingModule,
-    GamesComponentsModule,
+    GamesComponentsModule
   ],
   providers: [GameEditorService],
   declarations: [

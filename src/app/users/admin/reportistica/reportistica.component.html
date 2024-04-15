@@ -1,0 +1,71 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar *ngIf="tipoUtente != 'ADMIN'">
+    <div class="wrapper">
+      <img id="logo-toolbar" src="../../../../assets/logo-small-grey.png" alt=""
+        style="vertical-align:middle; float:left; line-height: 56px">
+
+      <ion-buttons style="vertical-align:middle; float:right; line-height: 56px">
+        <ion-button (click)="openUserPopover($event)" title="Profilo / Logout">
+          <ion-icon slot="icon-only" name="person-outline" color="unicamblue"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+  </ion-toolbar>
+
+  <ion-toolbar *ngIf="tipoUtente == 'ADMIN'">
+    <ion-buttons slot="start">
+      <ion-menu-button color="unicamblue"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>REPORTISTICA</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <img src="../../../../assets/images/wave-header.png" alt="" class="wave-header">
+
+  <div class="container">
+
+    <ion-card class="transparent-card" style="max-width: 500px; margin:auto; margin-top: 10px;"
+      *ngIf="tipoUtente == 'OSPITE'">
+      <ion-item>
+        <h4 style="font-size: 14px; color: #949494;">Ricorda che gli utenti non registrati vengono eliminati ogni 24
+          ore.
+        </h4>
+        <ion-icon name="information-circle-outline" slot="end"></ion-icon>
+      </ion-item>
+    </ion-card>
+
+    <div class="section-header">
+      <h2 style="color: #fff;">Reportistica dei giochi</h2>
+      <p *ngIf="this.games.length == 0">Non è stato trovato alcun gioco! :(</p>
+    </div>
+
+
+    <swiper [slidesPerView]="1.2" [spaceBetween]="20" [navigation]="true" [breakpoints]="breakpoints">
+      <ng-container *ngFor="let game of games">
+        <ng-template swiperSlide>
+          <ion-card class="ioncardgame" (click)="openReportisticaGame(game)" tappable button="true">
+            <img src="../../../../assets/images/white_wave_header.png" alt="" class="white-wave-header">
+
+      <!--- <a [routerLink]="['/game', { nome: game }]">Vai a GameReport con parametro</a>-->   
+            <ion-item lines="none" class="players-item"
+              title="Da {{game.min_giocatori}} a {{game.max_giocatori}} giocatori">
+              <ion-label>
+                <ion-icon slot="start" name="people"></ion-icon>
+                {{game.min_giocatori}} - {{game.max_giocatori}}
+              </ion-label>
+            </ion-item>
+            <div class="game-title">
+              <ion-card-title>{{game.nome}}</ion-card-title>
+              <p>{{ materieNomi[game.id_materia] }} -  {{ categorieNomi[game.id_categoria] }} </p> 
+            </div>
+          </ion-card>
+        </ng-template>
+      </ng-container>
+    </swiper>
+
+    
+    <router-outlet></router-outlet>
+
+  </div>
+</ion-content>

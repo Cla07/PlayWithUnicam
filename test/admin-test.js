@@ -43,7 +43,7 @@ describe('Admin.js', function () {
         promises.push(creaAdminTest());
         promises.push(utente.creaUtente("user-t", "Mario", "Rossi", "password"));
         promises.push(utente.creaUtente("user-t10", "Test10", "Test10", "password"));
-        promises.push(game.creaGioco("Gioco Test", "TURNI", 2, 2, "test", true, {}, "test regolamento"));
+        promises.push(game.creaGioco("Gioco Test", "TURNI", 2, 2,"materia","categoria", "test", true, {}, "test regolamento"));
         return Promise.all(promises);
     });
 

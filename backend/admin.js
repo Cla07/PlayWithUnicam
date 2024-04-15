@@ -102,3 +102,63 @@ exports.modificaUtente = (username, newUsername, nome, cognome) => {
 }
 
 //TODO: fare metodo e REST che modifica il tipo
+
+
+/**
+ * Elimina una materia dato il suo nome 
+ * @param {*} nome Il nome della materia da eliminare.
+ */
+exports.eliminaMateria = (nome) => {
+    //TODO refactor con game
+    return new Promise((resolve, reject) => {
+        db.pool.query('delete from public.materia where nome = $1',
+            [nome], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject(new Error("Errore nell'eliminazione della materia: " + nome));
+                } else
+                    return resolve();
+            });
+    })
+}
+
+
+/**
+ * Elimina una categoria dato il suo nome 
+ * @param {*} nome Il nome della categoria da eliminare.
+ */
+exports.eliminaCategoria = (nome) => {
+    return new Promise((resolve, reject) => {
+        db.pool.query('delete from public.categoria where nome = $1',
+            [nome], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject(new Error("Errore nell'eliminazione della categoria: " + nome));
+                } else
+                    return resolve();
+            });
+    })
+}
+
+/**
+ * Ritorna la reportistica di un gioco 
+ * Reportistica dello stesso idGioco dato il nome 
+ * @returns il risultato della query
+ */
+//funziona ok 
+exports.getReportisticaGame = (nome) => {
+    return new Promise((resolve, reject) => {
+
+        const query = `
+        select r.username, r.cod_partita, r.id_gioco, r.punteggio, r.domande, r.tempo, r.badges, r.skills 
+        from reportistica as r join giochi on r.id_gioco = giochi.id 
+        AND r.id_gioco = (select giochi.id from giochi where giochi.nome = $1) `
+
+        db.pool.query(query,[nome], (error, results) => {
+                if (error)
+                    return reject(error);
+                else
+                    return resolve(results);
+            });
+    })
+}

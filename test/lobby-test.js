@@ -19,8 +19,8 @@ describe('Lobby.js', function () {
         promises.push(utente.creaOspite("guest-t4"));
         promises.push(utente.creaOspite("guest-t5"));
         promises.push(utente.creaOspite("guest-t6"));
-        promises.push(game.creaGioco("Gioco Test Turni", "TURNI", 1, 4, "link", true, {}, "regolamento"));
-        promises.push(game.creaGioco("Gioco Test MAX", "TURNI", 1, 1, "link", true, {}, "regolamento"));
+        promises.push(game.creaGioco("Gioco Test Turni", "TURNI", 1, 4,"materia","categoria", "link", true, {}, "regolamento"));
+        promises.push(game.creaGioco("Gioco Test MAX", "TURNI", 1, 1,"materia","categoria", "link", true, {}, "regolamento"));
         return Promise.all(promises);
     });
 

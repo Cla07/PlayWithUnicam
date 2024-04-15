@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS public.giochi
     attivo boolean NOT NULL,
 	config json NOT NULL,
 	regolamento text,
+    id_materia integer NOT NULL,
+	id_categoria integer NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -45,6 +47,7 @@ CREATE TABLE IF NOT EXISTS public.utenti
     password text NOT NULL,
     salt text NOT NULL,
     tipo character varying(20) NOT NULL,
+    nome_classe character varying(20) NOT NULL,
     PRIMARY KEY (username)
 );
 
@@ -104,5 +107,192 @@ ALTER TABLE public.partite
     ON DELETE CASCADE
 	ON UPDATE CASCADE
     NOT VALID;
+
+
+ALTER TABLE public.utenti
+    ADD FOREIGN KEY (nome_classe)
+    REFERENCES public.classe (nome)
+    ON DELETE CASCADE
+	ON UPDATE CASCADE
+    NOT VALID;
+/*Creazione tabella Materia*/
+
+CREATE TABLE IF NOT EXISTS public.materia
+(
+    id serial NOT NULL,
+    nome character varying(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+/*Creazione tabella Categoria*/
+CREATE TABLE IF NOT EXISTS public.categoria
+(
+    id serial NOT NULL,
+    nome character varying(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+/*Creazione tabella Badge*/
+CREATE TABLE IF NOT EXISTS public.badge
+(
+    id serial NOT NULL,
+    nome character varying(50) NOT NULL,
+    tipo character varying(50) NOT NULL,
+    descrizione text,
+    PRIMARY KEY (id)
+);
+
+/*Creazione tabella Skill*/
+CREATE TABLE IF NOT EXISTS public.skill
+(
+    id serial NOT NULL,
+    nome character varying(50) NOT NULL,
+    tipo character varying(50) NOT NULL,
+    descrizione text,
+    PRIMARY KEY (id)
+);
+
+/*Creazione tabella Giochi-badge */
+CREATE TABLE IF NOT EXISTS public.giochi_badge
+(
+    id_gioco integer NOT NULL,
+    id_badge integer NOT NULL,
+    PRIMARY KEY (id_gioco,id_badge)
+);
+
+/*Creazione tabella Giochi-skill */
+CREATE TABLE IF NOT EXISTS public.giochi_skill
+(
+    id_gioco integer NOT NULL,
+    id_skill integer NOT NULL,
+    PRIMARY KEY (id_gioco,id_skill)
+);
+
+
+/*Creazione tabella utente_badge */
+CREATE TABLE IF NOT EXISTS public.utente_badge
+(
+    id serial NOT NULL,
+    username character varying(10) NOT NULL,
+    id_badge integer NOT NULL,
+    codice_partita character varying(20), 
+    PRIMARY KEY (id)  /*username,id_badge*/
+);
+
+/*Creazione tabella utente_skill */
+CREATE TABLE IF NOT EXISTS public.utente_skill
+(
+    id serial NOT NULL,
+    username character varying(10) NOT NULL,
+    id_skill integer NOT NULL,
+    codice_partita character varying(20),
+    PRIMARY KEY (id)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.reportistica
+(
+    id serial NOT NULL,
+	username character varying(20) NOT NULL,
+    cod_partita character varying(20) NOT NULL,
+    id_gioco integer NOT NULL,
+    punteggio integer,
+    domande integer,  /*domande totali*/
+	tempo integer, 
+    badges text,
+    skills text,
+    PRIMARY KEY (id)
+);
+
+
+/* Relazione tra id_materia della tab giochi con id di materia*/
+ALTER TABLE public.giochi
+ADD FOREIGN KEY (id_materia)
+REFERENCES materia(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+/* Relazione tra id_materia della tab giochi con id di categoria*/
+ALTER TABLE public.giochi
+ADD FOREIGN KEY (id_categoria)
+REFERENCES categoria(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+
+
+/*Relazione tra id_gioco della tabella giochi_badge con id della tabella giochi*/
+ALTER TABLE public.giochi_badge
+ADD FOREIGN KEY (id_gioco)
+REFERENCES giochi(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+/*Relazione tra id_badge della tabella giochi_badge con id della tabella badge*/
+ALTER TABLE public.giochi_badge
+ADD FOREIGN KEY (id_badge)
+REFERENCES badge(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+
+/*Relazione tra id_gioco della tabella giochi_skill con id della tabella giochi*/
+ALTER TABLE public.giochi_skill
+ADD FOREIGN KEY (id_gioco)
+REFERENCES giochi(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+/*Relazione tra id_skill della tabella giochi_skill con id della tabella skill */
+ALTER TABLE public.giochi_skill
+ADD FOREIGN KEY (id_skill)
+REFERENCES skill(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+
+/*Relazione tra username della tabella utente_badge con username della tabella utente*/
+ALTER TABLE public.utente_badge
+ADD FOREIGN KEY (username)
+REFERENCES utenti(username)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+/*Relazione tra id_badge della tabella utente_badge con id della tabella badge*/
+ALTER TABLE public.utente_badge
+ADD FOREIGN KEY (id_badge)
+REFERENCES badge(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+
+/*Relazione tra username della tabella utente_skill con username della tabella skill*/
+ALTER TABLE public.utente_skill
+ADD FOREIGN KEY (username)
+REFERENCES utenti(username)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+/*Relazione tra id_skill della tabella utente_skill con id della tabella skill*/
+ALTER TABLE public.utente_skill
+ADD FOREIGN KEY (id_skill)
+REFERENCES skill(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT VALID;
+
+/*
+Query per far ripartire una sequenza da 1, in questo caso il campo id della tabella badge viene fatto ripartire da 1 
+ALTER SEQUENCE badge_id_seq RESTART WITH 1;
+*/
 
 END;

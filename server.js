@@ -12,6 +12,7 @@ const utente = require('./backend/utente');
 const giocatore = require('./backend/multiplayer/giocatore');
 const messaggi = require('./backend/messaggi');
 const erroManager = require('./backend/error-manager');
+const reportistica = require('./backend/multiplayer/reportistica');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -146,6 +147,638 @@ app.get('/games', (req, res) => {
             });
     } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 })
+
+/**
+ * REST - Restituisce l'elenco delle materie nel database 
+ */
+app.get('/materie', (req, res) => {
+    const token = req.headers.token;
+    //se il token è verificato
+   if (verificaJWT(token) ) {     // funzionante con verificaAdmin(token)
+    game.getListaMaterie()  //richiamo il metodo sul game (dove c'è la query al db)
+    .then(results => sendDataInJSON(res, results))  //trasformo in json 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+
+})
+
+
+/**
+ * REST - Inserisce la materia nel db (dato il nome della materia scelto dall'utente) */
+app.post('/materia/crea', (req, res) => {
+   if (verificaJWT(req.body.token)) {     //funzionante con verificaAdmin(req.body.token)
+    game.creaMateria(req.body.nome)  //richiamo il metodo sul game (dove c'è la query al db)
+    .then(results => sendDataInJSON(res, results))   
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+
+})
+
+
+/**
+ * REST Restituisce il nome della materia il cui id viene passato come parametro ed è uguale all'id_materia nella tabella giochi   
+ */
+app.get('/materia/:id', (req, res) => {
+    const token = req.headers.token;
+    //se il token è verificato
+    if (verificaJWT(token) ) {     // funzionante con verificaAdmin(token)   
+    game.getNomeMateria(req.params.id)  //richiamo il metodo sul game (dove c'è la query al db) 
+    .then(results => sendDataInJSON(res, results))  //trasformo in json 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+/**
+ * REST Restituisce il nome della materia il cui id viene passato come parametro ed è uguale all'id_materia nella tabella giochi  
+ * è uguale al metodo sopra ma questo metodo viene usato per cercare la materia  nella dashboard NON CANCELLARE 
+ */
+app.get('/cercamateria/:id', (req, res) => {
+    const token = req.headers.token;
+    //se il token è verificato
+    if (verificaJWT(token) ) {     // funzionante con verificaAdmin(token)   
+    game.getNomeMateria(req.params.id)  //richiamo il metodo sul game (dove c'è la query al db) 
+    .then(results => sendDataInJSON(res, results))  //trasformo in json 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+/**
+ * REST Restituisce l'id del nome della materia passata come parametro  
+ */
+app.get('/materie/:nome', (req, res) => {
+    const token = req.headers.token;
+    //se il token è verificato
+   if (verificaJWT(token)) {     //funzionante con verificaAdmin(token)
+    game.getIdMateria(req.params.nome)  
+    .then(results => sendDataInJSON(res, results)) 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+/**
+ * REST - Elimina una materia dato il nome 
+ */
+app.delete('/elimina/mat', (req, res) => {
+    if (verificaAdmin(req.headers.token)) {
+        admin.eliminaMateria(req.headers.nome)
+            .then(_ => sendEsitoPositivo(res))
+            .catch(err => {
+                console.log(err);
+                return erroManager.handleError(err, res);
+            });
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
+});
+
+
+/**
+ * REST - Restituisce l'elenco delle categorie nel database 
+ */
+app.get('/categorie', (req, res) => {
+    const token = req.headers.token;
+    //se il token è verificato
+    if (verificaJWT(token) ) {     // funzionante con verificaAdmin(token) if (verificaAdmin(token)) {   
+    game.getListaCategorie()  //richiamo il metodo sul game (dove c'è la query al db)
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+
+})
+
+
+/**
+ * REST - Inserisce la categoria nel db (dato il nome della categoria scelto dall'utente) */
+app.post('/categoria/crea', (req, res) => {
+   if (verificaAdmin(req.body.token)) {   
+    game.creaCategoria(req.body.nome)  //richiamo il metodo sul game (dove c'è la query al db)
+    .then(results => sendDataInJSON(res, results))   
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+
+})
+
+
+/**
+ * REST Restituisce il nome della categoria il cui id viene passato come parametro ed è uguale all'id_categoria nella tabella giochi   
+ */
+app.get('/categoria/:id', (req, res) => {
+    const token = req.headers.token;
+   if (verificaAdmin(token)) {   
+    game.getNomeCategoria(req.params.id)  
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+/**
+ * REST Restituisce l'id del nome della categoria passata come parametro  
+ */
+app.get('/categorie/:nome', (req, res) => {
+    const token = req.headers.token;
+   if (verificaAdmin(token)) {   
+    game.getIdCategoria(req.params.nome)  
+    .then(results => sendDataInJSON(res, results)) 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+/**
+ * REST - Elimina una categoria dato il nome 
+ */
+app.delete('/elimina/categoria', (req, res) => {
+    if (verificaAdmin(req.headers.token)) {
+        admin.eliminaCategoria(req.headers.nome)
+            .then(_ => sendEsitoPositivo(res))
+            .catch(err => {
+                console.log(err);
+                return erroManager.handleError(err, res);
+            });
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
+});
+
+
+/**
+ * REST Restituisce il nome della categoria il cui id viene passato come parametro ed è uguale all'id_materia nella tabella giochi  
+ *
+ */
+app.get('/cercacategoria/:id', (req, res) => {
+    const token = req.headers.token;
+    //se il token è verificato
+    if (verificaJWT(token) ) {     // funzionante con verificaAdmin(token)   
+    game.getNomeCategoria(req.params.id)  //richiamo il metodo sul game (dove c'è la query al db) 
+    .then(results => sendDataInJSON(res, results))  //trasformo in json 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+/**BADGE */
+
+/**
+ * REST - Restituisce l'elenco di tutti i badge nel db 
+ */
+app.get('/badges', (req, res) => {
+    const token = req.headers.token;
+    if (verificaJWT(token)){    //giocatore o insegnante 
+    game.getListaBadge()  
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+
+})
+
+
+/**
+ * REST - Inserisce un badge nel db (dato il nome del badge scelto dall'utente) */    
+app.post('/badge/crea', (req, res) => {
+    if (verificaJWT(req.body.token)) {   
+     game.creaBadge(req.body.nome, req.body.tipo, req.body.descrizione)  //richiamo il metodo sul game (dove c'è la query al db)
+     .then(results => sendDataInJSON(res, results))   
+     .catch(err => {
+         console.log(err);
+         return erroManager.handleError(err, res);
+     });
+     } 
+ 
+ })
+
+
+ /**
+ * REST - Inserisce un id badge e id game nella tabella giochi_badge nel db */  
+app.post('/giochi_badge/insert', (req, res) => {
+    if (verificaJWT(req.body.token)) {     
+     game.insertGameBadge(req.body.idGioco, req.body.idBadge) 
+     .then(results => sendDataInJSON(res, results))   
+     .catch(err => {
+         console.log(err);
+         return erroManager.handleError(err, res);
+     });
+     } 
+ 
+ })
+
+
+/**
+ * REST Restituisce l'id del nome del badge passato come parametro  
+ */
+app.get('/badge/:nome', (req, res) => {
+    const token = req.headers.token;
+    if (verificaJWT(token)) {      
+    game.cercaIdBadgeDaNome(req.params.nome)  
+    .then(results => sendDataInJSON(res, results)) 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+ 
+ /**
+  * Inserimento in tabella utente_badge e aggiornamento della reportistica con i badge 
+  */
+app.post('/utente_badge/insert', async (req, res) => {
+    try {
+        if (verificaJWT(req.body.token)) {
+          
+            
+           // const isOspite = await game.verificaEsistenzaOspite(req.body.username);
+          //  console.log("UTENTE ESISTE: "+isOspite)
+            //se ospite non viene fatto l'inserimento in tabella
+           // if (isOspite === false) {
+                const results = await game.insertUtenteBadge(req.body.username, req.body.id_badge, req.body.codice_partita);
+                sendDataInJSON(res, results);
+                
+              //  const nomeBadge = await game.getNomeBadgeDaId(req.body.id_badge);
+                await reportistica.aggiornaReportisticaConBadge(req.body.id_badge, req.body.username, req.body.codice_partita);
+         //   }
+        } else {
+            res.status(401).json({ success: false, message: 'Token non valido.' });
+        }
+    } catch (err) {
+        console.error(err);
+        return erroManager.handleError(err, res);
+    }
+});
+
+
+/**
+ * REST Restituisce la lista di badge dato id del gioco   
+ */
+app.get('/badges/:idGioco', (req, res) => {
+    const token = req.headers.token;
+   if (verificaJWT(token)) {   
+    game.getListaBadgeDaIdGioco(req.params.idGioco)  
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+/**
+ * REST Restituisce la lista di badge dato username e codice partita da tabella utente_badge    
+ */
+app.get('/badges/user', (req, res) => {
+    const token = req.headers.token;
+   if (verificaJWT(token)) {   
+    game.getUtenteBadgeCodPartita(req.body.username, req.body.codice_partita)  //da verificare se body va bene  
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+
+/**
+ * REST Restituisce la lista di badge dato username (tutti i badge conquistati da un giocatore togliendo i duplicati)
+ */
+app.get('/badge/username/:username', (req, res) => {
+    const token = req.headers.token;
+   if (verificaJWT(token)) {   
+    game.getListaBadgeDaUsername(req.params.username)  
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+/** SKILL */
+/**
+ * REST - Restituisce l'elenco di tutte le skill 
+ */
+app.get('/skills', (req, res) => {
+    const token = req.headers.token;
+    //se il token è verificato
+    if (verificaJWT(token)){    //giocatore o insegnante 
+    game.getListaSkill()  
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+
+})
+
+
+/**
+ * REST - Inserisce una skill nella tabella skill */
+
+app.post('/skill/crea', (req, res) => {
+    if (verificaJWT(req.body.token)) {   
+     game.creaSkill(req.body.nome, req.body.tipo, req.body.descrizione)  
+     .then(results => sendDataInJSON(res, results))   
+     .catch(err => {
+         console.log(err);
+         return erroManager.handleError(err, res);
+     });
+     } 
+ 
+ })
+
+
+ /**
+ * REST - Inserisce un id skill e id game nella tabella giochi_skill */  
+app.post('/giochi_skill/insert', (req, res) => {
+    if (verificaJWT(req.body.token)) {      //funzionante verificaAdmin(req.body.token)
+     game.insertGameSkill(req.body.id_gioco, req.body.id_skill) 
+     .then(results => sendDataInJSON(res, results))   
+     .catch(err => {
+         console.log(err);
+         return erroManager.handleError(err, res);
+     });
+     } 
+ 
+ })
+
+
+/**
+ * REST Restituisce l'id del nome della skill passata come parametro  
+ */
+app.get('/skill/:nome', (req, res) => {
+    const token = req.headers.token;
+    if (verificaJWT(token)) {      //funzionante verificaAdmin(req.body.token)  
+    game.cercaIdSkillDaNome(req.params.nome)  
+    .then(results => sendDataInJSON(res, results)) 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+  /**
+  * REST - Inserimento in tabella utente_badge e aggiornamento della reportistica con le skill  
+  */
+app.post('/utente_skill/insert', async (req, res) => {
+
+    try {
+        if (verificaJWT(req.body.token)) {
+    
+            const results = await game.insertUtenteSkill(req.body.username, req.body.id_skill, req.body.codice_partita);
+            sendDataInJSON(res, results);
+            await reportistica.aggiornaReportisticaConSkill(req.body.id_skill, req.body.username, req.body.codice_partita);   
+        } else {
+            res.status(401).json({ success: false, message: 'Token non valido.' });
+        }
+    } catch (err) {
+        console.error(err);
+        return erroManager.handleError(err, res);
+    }
+
+});
+
+//prova inserendo l'id della skill, ma prendendolo dal nome passato 
+app.post('/utente_skill/insert2', async (req, res) => {
+    try {
+        if (verificaJWT(req.body.token)) {
+            const results = await game.insertUtenteSkill2(req.body.username, req.body.nome_skill, req.body.codice_partita);
+            sendDataInJSON(res, results);
+            
+          
+            await reportistica.aggiornaReportisticaConSkill2(req.body.nome_skill, req.body.username, req.body.codice_partita);
+
+        } else {
+            res.status(401).json({ success: false, message: 'Token non valido.' });
+        }
+    } catch (err) {
+        console.error(err);
+        return erroManager.handleError(err, res);
+    }
+});
+
+
+
+/**
+ * REST Restituisce la lista delle skill di un certo gioco (dato id del gioco)   
+ */
+app.get('/skills/:idGioco', (req, res) => {
+    const token = req.headers.token;
+   if (verificaJWT(token)) {   
+    game.getListaSkillDaIdGioco(req.params.idGioco)  
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+/**
+ * REST Restituisce la lista di skill dato username e codice partita da tabella utente_skill e skill    
+ */
+app.get('/skills/user', (req, res) => {
+    const token = req.headers.token;
+   if (verificaJWT(token)) {   
+    game.getUtenteSkillCodPartita(req.body.username, req.body.codice_partita)  //da verificare se body va bene  
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+/**
+ * REST Restituisce la lista di badge dato username (tutti i badge conquistati da un giocatore togliendo i duplicati)
+ */
+app.get('/skill/username/:username', (req, res) => {
+    const token = req.headers.token;
+   if (verificaJWT(token)) {   
+    game.getListaSkillDaUsername(req.params.username)  
+    .then(results => sendDataInJSON(res, results))  
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+/**FINE SKILL */
+ 
+/**
+ * REST Restituisce l'id del nome del gioco passato come parametro  
+ */
+app.get('/gioco/:nome', (req, res) => {
+    const token = req.headers.token;
+    if (verificaJWT(token)) {    //funzionante verificaAdmin(req.body.token)    
+    game.cercaIdGiocoDaNome(req.params.nome)  
+    .then(results => sendDataInJSON(res, results)) 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+/**
+ * Prova aggiornamento reportistica con badge e skill conquistati
+ */
+app.get('/aggiorna/report', (req, res) => {
+    const token = req.headers.token;
+    if (verificaJWT(token)) {    //funzionante verificaAdmin(req.body.token)    
+    game.getListaBadgeUserMatch(req.body.username,req.bofy.cod_partita) 
+
+    .then(results => sendDataInJSON(res, results)) 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+// REST - Inserimento dati in tabella Reportistica  
+ app.post('/reportistica/crea', (req, res) => {
+    if (verificaJWT(req.body.token)) {      
+     reportistica.creaReportistica(req.body.username,req.body.cod_partita,req.body.id_gioco,req.body.score,req.body.answers,req.body.time,req.body.badges, req.body.skills)  
+     .then(results => sendDataInJSON(res, results))   
+     .catch(err => {
+         console.log(err);
+         return erroManager.handleError(err, res);
+     });
+     } 
+ 
+ })
+
+
+ /**
+ * REST - Reportistica di un certo giocatore e stesso idGioco
+ */
+app.get('/reportistica/:username/:id_gioco', (req, res) => {
+    const token = req.headers.token;
+    if (verificaJWT(token)) {     
+    reportistica.getReportUserIdGame(req.params.username,req.params.id_gioco)  
+    .then(results => sendDataInJSON(res, results)) 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+
+/**
+ * REST - Ritorna all'Admin la lista della reportistica 
+ */
+app.get('/admin/reportGame', (req, res) => {
+    if (verificaJWT(req.headers.token)) {    //verificaAdmin
+        admin.getReportisticaGame(req.headers.nome)   //(jwt.decode(req.headers.token).nome)
+            .then(results => sendDataInJSON(res, results))
+            .catch(err => {
+                console.log(err);
+                return erroManager.handleError(err, res);
+            });
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
+});
+
+/**
+ * REST - Restituisce numero di righe dalla reportistica dello stesso utente e stessa categoria di gioco
+ */
+
+//non funziona
+app.get('/num/report', (req, res) => {
+    if (verificaJWT(req.body.token)) {         
+    reportistica.getNumReportUserCategory(req.body.username, req.body.categoria)  
+    .then(results => sendDataInJSON(res, results))
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+
+app.get('/num/report/:username/:categoria', (req, res) => {
+    if (verificaJWT(req.headers.token)) {
+        reportistica.getNumReportUserCategory(req.params.username,req.params.categoria)
+            .then(results => sendDataInJSON(res, results))
+            .catch(err => {
+                console.log(err);
+                return erroManager.handleError(err, res);
+            })
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
+});
+
+  /**
+ * REST - Reportistica di un certo gioco
+ * (NB, stessa istanza di gioco)
+ */
+app.get('/reportistica/:id_gioco', (req, res) => {
+    const token = req.headers.token;
+    if (verificaJWT(token)) {       
+    game.getReportIdGame(req.params.id_gioco)  
+    .then(results => sendDataInJSON(res, results)) 
+    .catch(err => {
+        console.log(err);
+        return erroManager.handleError(err, res);
+    });
+    } 
+})
+
+
+/**
+ * REST - aggiorna la reportistica con badge e skill della partita 
+ */
+app.put('/report/update', (req, res) => {
+    if (verificaJWT(req.body.token)) {
+        reportistica.aggiornaReportisticaConBadgeSkill(req.body.badges, req.body.skills, req.body.username, req.body.cod_partita)
+        .then(_ => sendEsitoPositivo(results)) 
+            .catch(err => {
+                console.log(err);
+                return erroManager.handleError(err, res);
+            });
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
+});
+
 
 /**
  * REST - Ritorna all'Admin della Piattaforma la lista dei Giochi
@@ -446,8 +1079,7 @@ app.put('/modifica/password', (req, res) => {
  */
 app.put('/game/modifica', (req, res) => {
     if (verificaAdmin(req.body.token)) {
-        game.modificaGioco(req.body.id, req.body.nome, req.body.tipo, req.body.minGiocatori,
-            req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento)
+        game.modificaGioco(req.body.id, req.body.nome, req.body.tipo, req.body.minGiocatori, req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento, req.body.id_materia, req.body.id_categoria)
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
@@ -663,7 +1295,7 @@ app.post('/partita', (req, res) => {
  */
 app.post('/game/crea', (req, res) => {
     if (verificaAdmin(req.body.token)) {
-        game.creaGioco(req.body.nome, req.body.tipo, req.body.minGiocatori, req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento)
+        game.creaGioco(req.body.nome, req.body.tipo, req.body.minGiocatori, req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento, req.body.id_materia, req.body.id_categoria)  //, req.body.id_materia, req.body.id_categoria
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);

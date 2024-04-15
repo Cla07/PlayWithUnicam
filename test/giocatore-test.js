@@ -20,7 +20,7 @@ describe('Giocatore.js', function () {
         promises.push(utente.creaOspite("guest_test"));
         promises.push(utente.creaOspite("guest2-t"));
         promises.push(utente.creaOspite("guest3-t"));
-        promises.push(game.creaGioco("game_test", "NORMALE", 1, 5, "gameTest", false, {}, ""));
+        promises.push(game.creaGioco("game_test", "NORMALE", 1, 5,"materiaTest","categoriaTest", "gameTest", false, {}, ""));
         return Promise.all(promises);
     });
 

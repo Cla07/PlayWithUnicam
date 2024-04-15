@@ -16,6 +16,8 @@ const routes: Routes = [
       { path: 'dashboard', loadChildren: () => import('../../player/dashboard/dashboard.module').then(m => m.DashboardPageModule) },
       { path: 'users', loadChildren: () => import('../users/users.module').then(m => m.UsersPageModule) },
       { path: 'account', loadChildren: () => import('../../account/account.module').then(m => m.AccountPageModule) },
+      { path: 'edit-materia-categoria', loadChildren: () => import('../edit-materia-categoria/edit-materia-categoria.module').then(m => m.EditMateriaCategoriaModule) },
+      { path: 'reportistica', loadChildren: () => import('../reportistica/reportistica.module').then(m => m.ReportisticaModule) },
     ]
   }
 ];

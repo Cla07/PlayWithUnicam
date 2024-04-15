@@ -19,6 +19,10 @@ export class AccountPage implements OnInit {
   passwords: FormGroup;
   user = { 'username': null, 'nome': null, 'cognome': null, 'password': null, 'salt': null, 'tipo': null };
 
+  
+  badgesFromUsername: any [];
+  skillsFromUsername: any [] ;
+
   constructor(
     private loadingController: LoadingController,
     private logService: LoginService,
@@ -34,7 +38,9 @@ export class AccountPage implements OnInit {
         if (tipoUtente)
           if (tipoUtente == "ADMIN") this.tipoUtente = tipoUtente;
       }
-    ).then(_ => { this.getDatiProfilo(); });
+    ).then(_ => { this.getDatiProfilo();  
+    
+    });   
   }
 
   ngOnInit() {
@@ -55,6 +61,10 @@ export class AccountPage implements OnInit {
       nome: [this.user.nome, [Validators.required]],
       cognome: [this.user.cognome, [Validators.required]]
     })
+
+    this.getBadgesFromUser(this.user.username);   //prendo badge conquistati dal giocatore corrente 
+    this.getSkillsFromUser(this.user.username);   //prendo skill conquistate dal giocatore corrente 
+
   }
 
   /**
@@ -165,5 +175,68 @@ export class AccountPage implements OnInit {
       await loading.dismiss();
     }
   }
+
+
+  /**
+ * Restituisce tutti i badge conquistati da un giocatore 
+ * @param 
+ */
+  async getBadgesFromUser(username: any) {
+    const tokenValue = (await this.loginService.getToken()).value;
+    const headers = { 'token': tokenValue };
+
+    this.http.get('/badge/username/'+username, { headers })
+      .subscribe(
+        async (res) => {
+  
+          this.badgesFromUsername  = await res['results']; 
+       
+        // Ordinamento per numero nel badge e tipo
+          this.sortingBadgesForNumberType();
+        },
+        async (res) => {
+          this.errorManager.stampaErrore(res, 'Impossibile caricare i badges di un certo giocatore da database!');
+        })
+  }
+
+    /**
+ * Restituisce tutti i badge conquistati da un giocatore 
+ * @param 
+ */
+    async getSkillsFromUser(username: any) {
+      const tokenValue = (await this.loginService.getToken()).value;
+      const headers = { 'token': tokenValue };
+  
+      this.http.get('/skill/username/'+username, { headers })
+        .subscribe(
+          async (res) => {
+    
+            this.skillsFromUsername  = await res['results']; 
+  
+          },
+          async (res) => {
+            this.errorManager.stampaErrore(res, 'Impossibile caricare le skills di un certo giocatore da database!');
+          })
+    }
+
+/**
+ * Ordina badges conquistati per nome e tipo 
+ * 
+ */
+   public sortingBadgesForNumberType(){
+
+     // Ordinamento badge per numero (crescente) e poi per tipo
+     this.badgesFromUsername.sort((a, b) => {
+      const aCount = parseInt(a.nome.match(/\d+/)[0], 10);
+      const bCount = parseInt(b.nome.match(/\d+/)[0], 10);
+
+      if (aCount !== bCount) {
+        return aCount - bCount; // Ordinamento per numero
+      } else {
+        return a.tipo.localeCompare(b.tipo); // Ordinamento per tipo
+      }
+    });
+
+   }
 
 }

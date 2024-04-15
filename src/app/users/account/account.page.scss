@@ -91,3 +91,32 @@
     width: 100%;
   }
 }
+
+.badge-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  //aggiunto 
+ // flex: 1; /* Flessibile per occupare lo spazio disponibile in modo uniforme */
+ // margin-right: 10px; /* Aggiunge spazio tra i box, se necessario */
+
+}
+
+.skill-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+ // flex: 1; /* Flessibile per occupare lo spazio disponibile in modo uniforme */
+//  margin-right: 10px; /* Aggiunge spazio tra i box, se necessario */
+
+}
+
+
+img {
+  max-width: 50px;  /* Larghezza massima dell'immagine */
+  margin-right: 10px;  /* Margine a destra dell'immagine per separarla dal testo */
+}
+
+

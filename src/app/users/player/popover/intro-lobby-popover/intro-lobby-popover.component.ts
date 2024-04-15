@@ -5,6 +5,8 @@ import { CreaLobbyPage } from '../../modal/crea-lobby/crea-lobby.page';
 import { CercaPubblicaPage } from '../../modal/cerca-pubblica/cerca-pubblica.page';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { EditGamePage } from 'src/app/users/admin/modal-pages/edit-game/edit-game.page';
+import { BadgeService } from 'src/app/users/admin/services/badge-service/badge.service';
+import { SkillService } from 'src/app/users/admin/services/skill-service/skill.service';
 
 @Component({
   selector: 'app-intro-lobby-popover',
@@ -18,7 +20,9 @@ export class IntroLobbyPopoverComponent implements OnInit {
   constructor(
     private popoverController: PopoverController,
     private loginService: LoginService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private badgeService: BadgeService,
+    private skillService: SkillService
   ) {
     this.loginService.getUserType().then(
       tipoUtente => {
@@ -28,7 +32,12 @@ export class IntroLobbyPopoverComponent implements OnInit {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+     //carico i badge del gioco selezionato da giochi_badge e li salvo in badgeService poi rivado a prendere tale valore nel gioco ad esempio in quiz.ts 
+    this.badgeService.getBadgesFromIdGame(this.giocoSelezionato.id)
+    //carico le skill del gioco selezionato da giochi_skill  e li salvo in skillService poi rivado a prendere tale valore nel gioco ad esempio in quiz.ts
+    this.skillService.getSkillsFromIdGame(this.giocoSelezionato.id)
+   }
 
   closePopover() {
     this.popoverController.dismiss();

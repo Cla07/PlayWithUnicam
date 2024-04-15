@@ -12,6 +12,8 @@ import { IntroLobbyComponentModule } from '../popover/intro-lobby-popover/intro-
 import { UserPopoverComponentModule } from 'src/app/components/user-popover/user-popover.module';
 import { SwiperModule } from 'swiper/angular';
 import { CreateGamePageModule } from '../../admin/modal-pages/create-game/create-game.module';
+import { MateriaModule } from 'src/app/components/materia/materia.module';
+import { CategoriaModule } from 'src/app/components/categoria/categoria.module';
 
 @NgModule({
   imports: [
@@ -23,7 +25,9 @@ import { CreateGamePageModule } from '../../admin/modal-pages/create-game/create
     IntroLobbyComponentModule,
     UserPopoverComponentModule,
     CreateGamePageModule,
-    SwiperModule
+    SwiperModule,
+    MateriaModule,
+    CategoriaModule,
   ],
   declarations: [DashboardPage]
 })

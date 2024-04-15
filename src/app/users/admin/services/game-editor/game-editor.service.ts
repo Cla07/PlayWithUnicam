@@ -9,13 +9,13 @@ import { EditorItem } from '../../components/editor-container/editor-item';
 @Injectable()
 export class GameEditorService {
 
-  private games: Game[] = [
-    new Game("Gioco dell'oca", GameType.TURNI, 1, 6, "/goose-game", GooseGameEditorComponent),
-    new Game("Memory multiplayer", GameType.NORMALE, 1, 10, "/memory-game", MemoryGameEditorPage, { version: "multi" }),
-    new Game("Memory multiplayer a schermo condiviso", GameType.NORMALE, 1, 1, "/memory", MemoryGameEditorPage, { version: "single" }),
-    new Game("Quiz", GameType.NORMALE, 1, 10, "/quiz", QuizEditorPage),
-    new Game("Pixel-Art", GameType.NORMALE, 1, 1, "/pixelart", null),
-    new Game("Percorsi", GameType.NORMALE, 1, 1, "/percorsi", null)
+  private games: Game[] = [    //inserito il valore null per la id_materia e id_categoria
+    new Game("Gioco dell'oca", GameType.TURNI, 1, 6,null,null, "/goose-game", GooseGameEditorComponent),
+    new Game("Memory multiplayer", GameType.NORMALE, 1, 10,null,null, "/memory-game", MemoryGameEditorPage, { version: "multi" }),
+    new Game("Memory multiplayer a schermo condiviso", GameType.NORMALE, 1, 1,null,null, "/memory", MemoryGameEditorPage, { version: "single" }),
+    new Game("Quiz", GameType.NORMALE, 1, 10,null,null, "/quiz", QuizEditorPage),
+    new Game("Pixel-Art", GameType.NORMALE, 1, 1,null,null, "/pixelart", null),
+    new Game("Percorsi", GameType.NORMALE, 1, 1,null,null, "/percorsi", null)
   ];
 
   /**

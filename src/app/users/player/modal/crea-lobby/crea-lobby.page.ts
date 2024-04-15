@@ -5,6 +5,7 @@ import { LoadingController, ModalController } from '@ionic/angular';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
+import { BadgeService } from 'src/app/users/admin/services/badge-service/badge.service';
 
 @Component({
   selector: 'app-crea-lobby',
@@ -22,10 +23,12 @@ export class CreaLobbyPage implements OnInit {
     private loadingController: LoadingController,
     private modalController: ModalController,
     private alertCreator: AlertCreatorService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private badgeService: BadgeService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+   }
 
   /**
    * Chiude la Modal.

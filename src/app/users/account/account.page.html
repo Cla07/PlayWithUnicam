@@ -52,12 +52,25 @@
 
           <ion-button class="button" type="submit" color="unicamblue" expand="block">Salva modifiche</ion-button>
         </ion-card-content>
-      </form>
+
+                 <!---BADGE CONQUISTATI-->
+                 <ion-card-content>
+                 <ion-label style=" font-weight: bold; margin-top: 20px; display: block;">BADGE</ion-label>
+                 <br>
+                 <div *ngFor="let badge of badgesFromUsername">
+                   <div class="badge-container">
+                     <img  [src]="'../../../assets/images/' + badge.nome + '.png'"  alt="">     <!---class="logo-toolbar" -->
+                     <h3>{{ badge.nome }}</h3>
+                   </div>
+                 </div>
+                 </ion-card-content>
+
+      </form> <!--Chiusura form a sinistra-->
     </div>
 
     <div class="form">
       <form (ngSubmit)="aggiornaPassword()" [formGroup]="passwords">
-        <ion-card-content>
+        <ion-card-content style="margin-bottom: 105px;">
           <div style="color: #737373;">Cambia password</div>
           <div class="input-row">
             <div class="icon-div">
@@ -87,6 +100,17 @@
           <ion-button class="button" type="submit" color="unicamred" expand="block">Cambia password</ion-button>
         </ion-card-content>
       </form>
-    </div>
-  </div>
+               <!---SKILLS CONQUISTATE-->
+            <ion-card-content>
+           <ion-label style=" font-weight: bold; display: block;">SKILL</ion-label>  
+           <br>
+           <div *ngFor="let skill of skillsFromUsername">
+             <div class="skill-container">
+              <img [src]="'../../../assets/images/' + skill.nome + '.png'"  alt="">
+               <h3>{{ skill.nome }}</h3>
+             </div>
+           </div>
+            </ion-card-content>
+    </div>  <!--Close Form container-->
+  </div>  <!--Close super container-->
 </ion-content>

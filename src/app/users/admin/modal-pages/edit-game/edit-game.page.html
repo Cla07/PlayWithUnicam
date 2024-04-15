@@ -44,6 +44,7 @@
           </ion-input>
         </ion-item>
 
+
         <ion-item lines="full" title="Attiva il gioco">
           <ion-label text-wrap>
             <b style="color:var(--ion-color-unicamblue);">Attiva</b>
@@ -54,10 +55,42 @@
         </ion-item>
       </form>
 
+         <!---Materia-->
+
+  <h2 class="label">Materia</h2>
+   <ion-item lines="none" title="Materia del gioco" >
+    <ion-label class="labelNomeMateria" text-wrap>
+    {{nomeMateria}}  
+    </ion-label>
+     <ion-button (click)="apriModaleMateria()" color="unicamblue" title="Modifica materia">
+      <ion-icon slot="icon-only" name="create"></ion-icon>
+    </ion-button>
+   </ion-item>
+
+<!---Fine materia-->
+  
+
+
+   <!---Categoria --->  
+   <h2 class="label">Categoria</h2>
+   <ion-item lines="none" title="Categoria del gioco" >
+    <ion-label class="labelNomeCategoria" text-wrap>
+    {{nomeCategoria}}  
+    </ion-label>
+     <ion-button (click)="apriModaleCategoria()" color="unicamblue" title="Modifica categoria">
+      <ion-icon slot="icon-only" name="create"></ion-icon>
+    </ion-button>
+   </ion-item>
+
+   <!--fine categoria-->
+
       <h2 class="label">Regolamento</h2>
 
       <ion-textarea name="regolamento" title="Regolamento del gioco" placeholder="Scrivi qui il regolamento del gioco"
         [(ngModel)]="regolamento" [ngModelOptions]="{standalone: true}"></ion-textarea>
+
+
+       
 
       <div class="delete-button">
         <ion-button slot="end" (click)="deleteGame()" color="unicamred" shape="round" title="Elimina questo gioco">

@@ -24,7 +24,7 @@ describe('Partita.js', function () {
         promises.push(utente.creaOspite("guest2-t"));
         promises.push(utente.creaOspite("guest4-t"));
         promises.push(utente.creaOspite("guest5-t"));
-        promises.push(game.creaGioco("game_test", "TURNI", 2, 2, "gameTest", false, {}, ""));
+        promises.push(game.creaGioco("game_test", "TURNI", 2, 2,"materia","categoria", "gameTest", false, {}, ""));
         return Promise.all(promises);
     });
 

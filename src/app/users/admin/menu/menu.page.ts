@@ -25,6 +25,18 @@ export class MenuPage implements OnInit {
       icon: 'person',
       url: '/admin/account'
     }
+    ,
+    {
+      title: 'Gestione materia-categoria',
+      icon: 'person', 
+      url: '/admin/edit-materia-categoria'
+    }
+    ,
+    {
+      title: 'Reportistica',
+      icon: 'person', 
+      url: '/admin/reportistica'
+    }
   ]
 
   constructor(private router: Router,

@@ -1,0 +1,75 @@
+ion-content{
+  --background: #fff; //--background:var(--ion-color-light);
+   // --background: transparent !important;
+}
+
+
+ion-item{
+  --background: transparent;
+
+  ion-icon{
+    color:var(--ion-color-unicamblue) !important;
+  }
+}
+
+ion-label{
+  text-transform: none;
+}
+
+
+.selectedMateriaCSS{
+    --background: green;
+    --color:var(--ion-color-light);
+  
+    ion-icon{
+      color:var(--ion-color-light) !important;
+    }
+  
+    p{
+      color:var(--ion-color-light) !important;
+    }
+  }
+  
+
+
+  .container{
+    max-width: 850px;
+    margin:auto;
+    padding: 20px;
+  }
+  
+  .materiaList{
+    border: 1px solid #cecece;
+    border-radius: 10px;
+    padding: 0px !important;
+  }
+
+  .listContent{
+    max-height: 350px !important;
+    overflow: auto;
+  }
+
+  .nuovaMateria{
+    color: red !important;
+  }
+
+  @media screen and (max-height:675px) {
+    .listContent{
+      max-height: 300px !important;
+    }
+  }
+  
+  @media screen and (max-height:640px) {
+    .listContent{
+      max-height: 250px !important;
+    }
+    .info{
+      font-size: 14px;
+    }
+  }
+  
+  @media screen and (max-height:590px) {
+    .listContent{
+      max-height: 200px !important;
+    }
+  }

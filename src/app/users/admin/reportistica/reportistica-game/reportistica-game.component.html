@@ -1,0 +1,150 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="unicamblue"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Reportistica del gioco: {{nomeGioco}}</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar>
+
+    <ion-row>
+      <ion-button (click)="toggleBulkEdit()" expand="full" shape="round" color="unicamblue"
+        [class.button-disabled]="reportGame.length == 0">Seleziona</ion-button>
+      <!---
+            <ion-button (click)="bulkDelete()" expand="full" shape="round" color="unicamred" *ngIf="bulkEdit">
+        -->
+      <ion-button (click)="bulkDownloads()" expand="full" shape="round" color="unicamred" *ngIf="bulkDownload">
+        <!--(click)="bulkDownloads()"-->
+        Download
+        <ion-icon slot="end" name="download-outline"></ion-icon>
+        <!---  <ion-icon slot="end" ></ion-icon>  name="trash" dare nome all'icona per mettere il tipo di icona-->
+      </ion-button>
+
+
+      <ion-button (click)="selectAllCheckboxes()" expand="full" shape="round" color="unicamgrey" *ngIf="bulkDownload">
+        <!--(click)="bulkDownloads()"-->
+        Scarica tutta la tabella
+        <ion-icon slot="end" name="download-outline"></ion-icon>
+        <!---  <ion-icon slot="end" ></ion-icon>  name="trash" dare nome all'icona per mettere il tipo di icona-->
+      </ion-button>
+
+    </ion-row>
+
+    <ion-item lines="none" class="ion-hide-lg-down">
+      <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+      <ion-label text-wrap>Fai click sull'icona della matita di una determinata riga per scaricarla in formato excel
+      </ion-label>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid fixed class="ion-hide-lg-down ion-gridPersonalized">
+
+    <ion-row class="header-row">
+      <ion-col size="0.5" *ngIf="bulkDownload" class="checkbox-column"></ion-col>
+      <!---tappable (click)="selectAllCheckboxes()-->
+
+      <ion-col size="1" tappable (click)="sortBy('username')">
+        <!-- <ion-col size-md="3" size-lg="3" tappable (click)="sortBy('username')">-->
+        Username
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'username'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'username'"></ion-icon>
+      </ion-col>
+
+      <ion-col size="1" tappable (click)="sortBy('cod_partita')">
+        Codice partita
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'cod_partita'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'cod_partita'"></ion-icon>
+      </ion-col>
+
+      <ion-col size="1" tappable (click)="sortBy('id_gioco')">
+        Id gioco
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'id_gioco'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'id_gioco'"></ion-icon>
+      </ion-col>
+
+      <ion-col size="1" tappable (click)="sortBy('punteggio')">
+        Punteggio
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'punteggio'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'punteggio'"></ion-icon>
+      </ion-col>
+
+      <ion-col size="1" tappable (click)="sortBy('domande')">
+        Domande
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'domande'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'domande'"></ion-icon>
+      </ion-col>
+      <ion-col size="1" tappable (click)="sortBy('tempo')">
+        Tempo
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'tempo'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'tempo'"></ion-icon>
+      </ion-col>
+      <ion-col size="2" tappable (click)="sortBy('badges')"> <!---size="1.5" size-lg="3" size-md="3"  -->
+        Badges
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'badges'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'badges'"></ion-icon>
+      </ion-col>
+
+      <ion-col size="2" tappable (click)="sortBy('skills')"> <!---class="child-class"-->
+        Skills
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'skills'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'skills'"></ion-icon>
+      </ion-col>
+
+      <ion-col size="0.5" class="checkbox-column"></ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let report of reportGame; let i = index;" class="data-row">
+      <ion-col size="0.5" *ngIf="bulkDownload" class="checkbox-column">
+        <ion-checkbox [(ngModel)]="download[i]"></ion-checkbox>
+        <!---  <ion-checkbox [(ngModel)]="edit[i]"></ion-checkbox>-->
+      </ion-col>
+
+      <ion-col size="1"> <!--size-md="3" size-lg="3" -->
+        {{report.username}}
+      </ion-col>
+
+      <ion-col size="1">
+        {{report.cod_partita}}
+      </ion-col>
+
+      <ion-col size="1">
+        {{report.id_gioco}}
+      </ion-col>
+
+      <ion-col size="1">
+        {{report.punteggio}}
+      </ion-col>
+
+      <ion-col size="1">
+        {{report.domande}}
+      </ion-col>
+
+      <ion-col size="1">
+        {{report.tempo}}
+      </ion-col>
+
+      <ion-col size="2"> <!--- size-md="2.5" size-lg="2.5" size="3"-->
+        {{report.badges}}
+      </ion-col>
+
+      <ion-col size="2">
+        {{report.skills}}
+      </ion-col>
+
+
+
+      <ion-col size="0.5" class="checkbox-column">
+        <ion-button fill="clear" color="unicamblue" (click)="downloadReportSingoloExcel(report, i)"
+          title="Download record">
+          <ion-icon name="download-outline"></ion-icon>
+          <!--<ion-icon slot="icon-only" name="create-outline"></ion-icon>-->
+        </ion-button>
+      </ion-col>
+
+
+    </ion-row>
+  </ion-grid>
+</ion-content>

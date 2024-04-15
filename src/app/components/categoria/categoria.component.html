@@ -1,0 +1,76 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()" fill="clear" color="unicamblue" title="Annulla">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{pageTitle}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content>
+  <div class="container">
+    <p *ngIf="!this.isAltraCategoria else bloccoParagNuova" class="info" style="margin-left: 20px;">
+      Seleziona una categoria tra le disponibili o premi "nuova" per creare una nuova categoria
+    </p>
+    <ng-template #bloccoParagNuova>
+      <p class="info">
+        Inserisci una nuova categoria
+      </p>
+    </ng-template>
+    <form (ngSubmit)="saveCategoria()" [formGroup]="categoriaForm">
+      <ion-grid>
+
+        <div *ngIf="categorie.length == 0 || this.isAltraCategoria  else bloccoElse" style="margin-bottom: 10px">
+          <!---aggiungere il bordo o un container-->
+          <ion-item>
+            <ion-input type="text" style="font-size: 20px;" placeholder="Inserisci la categoria del gioco"
+              name="categoriaIns" formControlName="categoriaIns"></ion-input>
+          </ion-item>
+        </div>
+
+        <ng-template #bloccoElse>
+          <ion-list class="categoriaList">
+            <!--
+    <ion-list-header>
+      <ion-label text-wrap>Seleziona una categoria da assegnare al gioco</ion-label>
+    </ion-list-header>
+    -->
+            <div class="listContent">
+              <ion-item button="true" (click)="selectAltraCategoria()">
+                <ion-label class="nuovaCategoria">Nuova</ion-label>
+              </ion-item>
+              <ion-item lines="none" *ngFor="let categoria of categorie;" button="true" (click)="selectCategoria(categoria)"
+                [class.selectedCategoriaCSS]="categoriaScelta == categoria" name="categoriaSel">
+                <ion-label text-wrap>
+                  {{categoria.nome}}
+                </ion-label>
+         
+              </ion-item>
+
+            </div>
+          </ion-list>
+
+        </ng-template>
+
+        <!---Elimina categoria-->
+
+
+        <ion-row>
+          <ion-col size="12" style="text-align: left;">
+            <!---
+                <ion-button *ngIf="modalType == 'modificaGioco'" [class.button-disabled]="!categoriaScelta" type="text" color="unicamblue" shape="round" style="float: left;"
+              (click)="eliminaCategoria()">Elimina
+            </ion-button>
+            -->
+            <ion-button type="submit" color="unicamred" shape="round" style="float: right;">Salva
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+
+      </ion-grid>
+    </form>
+  </div>
+</ion-content>

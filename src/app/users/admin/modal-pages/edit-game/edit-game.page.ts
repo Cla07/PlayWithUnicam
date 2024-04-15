@@ -7,6 +7,11 @@ import { ErrorManagerService } from 'src/app/services/error-manager/error-manage
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { EditorItem } from '../../components/editor-container/editor-item';
 import { GameEditorService } from '../../services/game-editor/game-editor.service';
+import { MateriaService } from '../../services/materia-service/materia.service';
+import { Subscription } from 'rxjs';
+import { MateriaComponent } from 'src/app/components/materia/materia.component';
+import { CategoriaComponent } from 'src/app/components/categoria/categoria.component';
+import { CategoriaService } from '../../services/categoria-service/categoria.service';
 
 @Component({
   selector: 'app-edit-game',
@@ -22,6 +27,23 @@ export class EditGamePage implements OnInit {
 
   @Input() game: any;
 
+  id_materia: any;
+  nomeMateriaProva: string;
+  private subscriptionNomeMateria: Subscription;
+  nomeMateria: string;
+  idMateriaScelta: number;
+  idMateriaInserita: number;
+
+
+  id_categoria: any;
+  nomeCategoriaProva: string;
+  private subscriptionNomeCategoria: Subscription;
+  nomeCategoria: string;
+  idCategoriaScelta: number;
+  idCategoriaInserita: number;
+
+
+  controllo: boolean;
   constructor(
     private http: HttpClient,
     private loginService: LoginService,
@@ -31,28 +53,99 @@ export class EditGamePage implements OnInit {
     private fb: FormBuilder,
     private alertCreator: AlertCreatorService,
     private navParams: NavParams,
-    private gameEditorService: GameEditorService) {
+    private gameEditorService: GameEditorService,
+    private materiaService: MateriaService,
+    private categoriaService: CategoriaService) {
   }
 
-  ngOnInit() {
-    this.game = this.navParams.get('game');   
+  async ngOnInit() {
+    this.game = this.navParams.get('game');
 
     if (this.game.config)
       this.editorItem = this.gameEditorService.getProperEditor(this.game.config);
 
     this.data = this.fb.group({
       nome: [this.game.nome],
-      attivo: [this.game.attivo]
+      attivo: [this.game.attivo],
     });
 
-    if (this.game.regolamento)
+    if (this.game.regolamento) {
       this.regolamento = this.game.regolamento;
+    }
+    //MATERIA 
+
+    this.materiaService.getListaMaterie();  //carico le materie da db e le salvo in materie del materiaService     
+
+    this.id_materia = this.game.id_materia; //prendo id materia assegnata al gioco nella create-game 
+
+    this.materiaService.getNomeMateriaFromId(this.id_materia);
+
+    this.subscriptionNomeMateria = this.materiaService.nomeMateriaProva$.subscribe((nomeMat) => {
+      this.nomeMateria = nomeMat;
+    });
+
+
+    this.categoriaService.getListaCategorie();
+
+    this.id_categoria = this.game.id_categoria;
+
+    this.categoriaService.getNomeCategoriaFromId(this.id_categoria);
+
+    //per trasferire il nome della categoria modificato nella modale, verso la pagina di edit 
+    this.subscriptionNomeCategoria = this.categoriaService.nomeCategoriaProva$.subscribe((nomeCat) => {
+      this.nomeCategoria = nomeCat;
+    })
+
   }
+
+
+  async apriModaleMateria() {
+    this.materiaService.setModalType('modificaGioco')
+    const modal = await this.modalController.create({
+      component: MateriaComponent,
+      cssClass: 'fullscreen'
+    });
+    modal.onDidDismiss().then((materia) => {
+
+      //salvo il nome della materia creata  
+      this.nomeMateria = this.materiaService.getNomeMateria();
+
+
+    });
+
+    return await modal.present();
+  }
+
+
+  async apriModaleCategoria() {
+    this.categoriaService.setModalType('modificaGioco')
+
+    const modal = await this.modalController.create({
+      component: CategoriaComponent,
+      cssClass: 'fullscreen'
+    });
+    modal.onDidDismiss().then((categoria) => {
+      if (categoria !== null) {
+        const categoriaSceltaz = categoria.data
+
+        const idCategoriaSceltaz = categoria['data']
+
+        console.log('Categoria scelta alla chiusura della modale' + categoriaSceltaz)
+      }
+      //salvo il nome della categ creata  
+      this.nomeCategoria = this.categoriaService.getNomeCategoria();
+    });
+    return await modal.present();
+  }
+
 
   updateConfig(newConfig: Object) {
     this.game.config = newConfig;
   }
-
+  ngOnDestroy() {
+    this.subscriptionNomeMateria.unsubscribe();
+    this.subscriptionNomeCategoria.unsubscribe();
+  }
   /**
    * Chiude la Modal.
    */
@@ -103,6 +196,35 @@ export class EditGamePage implements OnInit {
       toSend.maxGiocatori = this.game.max_giocatori;
       toSend.tipo = this.game.tipo;
       toSend.link = this.game.link;
+
+
+      //prendo id della materia scelta o inserita (creata nuova) dal service 
+      this.idMateriaScelta = this.materiaService.getIdMateriaFromSelect();
+      this.idMateriaInserita = this.materiaService.getIdMateriaInserita();
+      if (this.idMateriaScelta) {
+        toSend.id_materia = this.idMateriaScelta
+      }
+      else if (this.idMateriaInserita) {
+        toSend.id_materia = this.idMateriaInserita
+      }
+      //se non è stata modificata, prendo quella già presente nel gioco 
+      else {
+        toSend.id_materia = this.game.id_materia
+      }
+
+      //prendo id della categoria scelta o inserita (creata nuova) dal service 
+      this.idCategoriaScelta = this.categoriaService.getIdCategoriaFromSelect();
+      this.idCategoriaInserita = this.categoriaService.getIdCategoriaInserita();
+      if (this.idCategoriaScelta) {
+        toSend.id_categoria = this.idCategoriaScelta
+      }
+      else if (this.idCategoriaInserita) {
+        toSend.id_categoria = this.idCategoriaInserita
+      }
+      else { //se non è stata modificata, prendo quella già presente nel gioco 
+        toSend.id_categoria = this.game.id_categoria
+      }
+      
       toSend.token = tokenValue;
 
       this.http.put('/game/modifica', toSend).subscribe(

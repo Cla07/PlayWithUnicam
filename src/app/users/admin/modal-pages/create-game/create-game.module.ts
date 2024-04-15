@@ -8,6 +8,8 @@ import { CreateGamePageRoutingModule } from './create-game-routing.module';
 
 import { CreateGamePage } from './create-game.page';
 import { EditGamePageModule } from '../edit-game/edit-game.module';
+import { MateriaModule } from 'src/app/components/materia/materia.module';
+import { MateriaComponent } from 'src/app/components/materia/materia.component';
 
 @NgModule({
   imports: [
@@ -16,8 +18,8 @@ import { EditGamePageModule } from '../edit-game/edit-game.module';
     ReactiveFormsModule,
     IonicModule,
     CreateGamePageRoutingModule,
-    EditGamePageModule
+    EditGamePageModule,
   ],
-  declarations: [CreateGamePage]
+  declarations: [CreateGamePage]  
 })
 export class CreateGamePageModule { }

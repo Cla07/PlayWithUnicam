@@ -121,6 +121,18 @@ ion-modal.crea-parola {
     --border-radius: 0;
 }
 
+ion-modal.materia .modal-wrapper {
+    --width: 35% //35%;
+    --height: 80%;
+    --border-radius: 10px !important;
+}
+
+ion-modal.categoria .modal-wrapper {
+    --width: 35% //35%;
+    --height: 80%;
+    --border-radius: 10px !important;
+}
+
 .modal-wrapper{
     background: transparent !important;
 }
@@ -128,6 +140,15 @@ ion-modal.crea-parola {
 /* Mobile/Small Tablet Styles */
 @media only screen and (max-height: 475px){
     ion-modal.create-lobby .modal-wrapper{
+        --width: 100% !important;
+        --height: 100% !important;
+        --border-radius: 0px !important;
+    }
+}
+
+/* Mobile/Small Tablet Styles */
+@media only screen and (max-height: 475px){
+    ion-modal.materia .modal-wrapper{
         --width: 100% !important;
         --height: 100% !important;
         --border-radius: 0px !important;

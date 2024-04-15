@@ -12,6 +12,8 @@ export class Game {
     private maxPlayers: number;
     private url: string;
     private config: any = {};
+    private id_materia: number;
+    private id_categoria: number;
 
     /**
      * Editor del gioco utilizzato da: {@link GameEditorService}
@@ -27,17 +29,22 @@ export class Game {
      * @param url Url del gioco
      * @param editor Editor del gioco
      * @param configParams parametri opzionali da aggiungere al JSON di configurazione 
+     * @param id_materia id Materia del gioco
+     * @param id_categoria id Categoria del gioco
      */
-    constructor(name: string, type: GameType, minPlayers: number, maxPlayers: number, url: string, editor: Type<any>, configParams?: any) {
+    constructor(name: string, type: GameType, minPlayers: number, maxPlayers: number, id_materia:number, id_categoria:number, url: string, editor: Type<any>, configParams?: any ) { //, badges?: any, skills?: any
         this.name = name;
         this.type = type;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
+        this.id_materia = id_materia;
+        this.id_categoria = id_categoria;
         this.url = url
         this.editor = editor;
         if (configParams)
             this.config = configParams;
         this.config.game_name = name;
+
     }
 
     public getName(): string {
@@ -67,5 +74,15 @@ export class Game {
     public getEditor(): Type<any> {
         return this.editor;
     }
+
+
+    public getIdMateria(): number {
+        return this.id_materia;
+    }
+
+    public getIdCategoria(): number {
+        return this.id_categoria;
+    }
+    
 
 }

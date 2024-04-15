@@ -33,6 +33,16 @@ const routes: Routes = [
     canLoad: [AuthAdminGuard]
   },
   {
+    path: 'edit-materia-categoria',
+    loadChildren: () => import('./users/admin/edit-materia-categoria/edit-materia-categoria.module').then(m => m.EditMateriaCategoriaModule),
+    canLoad: [AuthAdminGuard]
+  },
+  {
+    path: 'reportistica',
+    loadChildren: () => import('./users/admin/reportistica/reportistica.module').then(m => m.ReportisticaModule),
+    canLoad: [AuthAdminGuard]
+  },
+  {
     path: 'lobby-admin',
     loadChildren: () => import('./users/player/lobby/lobby-admin/lobby-admin.module').then(m => m.LobbyAdminPageModule),
     canLoad: [AuthGiocatoriGuard]
@@ -80,7 +90,7 @@ const routes: Routes = [
     path: 'percorsi',
     loadChildren: () => import('./PlayWithUnicam-Games/percorsi/home.module').then( m => m.HomePageModule),
     canLoad: [AuthGiocatoriGuard]
-  }
+  },
 ];
 
 @NgModule({
